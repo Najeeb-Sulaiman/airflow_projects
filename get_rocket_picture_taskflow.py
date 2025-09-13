@@ -1,6 +1,5 @@
 from airflow.sdk import DAG, task
 from airflow.providers.standard.operators.bash import BashOperator
-from airflow.providers.standard.operators.python import PythonOperator
 import pendulum
 import requests
 import json
