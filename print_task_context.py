@@ -7,7 +7,7 @@ with DAG(
     schedule=None
 ) as dag:
     @task
-    def print_context(**kwargs):
-        print(kwargs)
+    def print_context(**context):
+        print(context)
 
     print_context()
