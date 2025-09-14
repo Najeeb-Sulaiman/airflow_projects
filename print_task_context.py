@@ -3,9 +3,9 @@ import pendulum
 
 with DAG(
     dag_id="print_task_context",
-    start_date=pendulum.datetime(),
+    start_date=pendulum.datetime(2025, 9, 10),
     schedule=None
-):
+) as dag:
     @task
     def print_context(**kwargs):
         print(kwargs)
