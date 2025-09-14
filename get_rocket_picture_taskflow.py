@@ -6,7 +6,7 @@ import json
 import requests.exceptions as requests_exceptions
 
 with DAG(
-    dag_id="rocket",
+    dag_id="rocket_taskflowapi",
     start_date=pendulum.datetime(2025, 9, 10),
     schedule=None,
     catchup=False
@@ -49,5 +49,5 @@ with DAG(
     )
 
     # Set the order of execution of tasks.
-    download_launches.set_downstream(_get_pictures)
+    download_launches.set_downstream(_get_pictures())
     _get_pictures().set_downstream(notify)
