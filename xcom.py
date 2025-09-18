@@ -5,16 +5,32 @@ from airflow.providers.standard.operators.python import BranchPythonOperator
 from airflow.providers.standard.operators.python import PythonOperator
 import pendulum
 
+
 def _train_model(**context):
     model_id = str(uuid.uuid4())
     context["task_instance"].xcom_push(key="model_id", value=model_id)
+
 
 def _deploy_model(**context):
     model_id = context["task_instance"].xcom_pull(
         task_ids="train_model", key="model_id"
     )
     print(f"Deploying model {model_id}")
-        
+
+
+# A better way to do it
+# def _train_model(ti):
+#     model_id = str(uuid.uuid4())
+#     ti.xcom_push(key="model_id", value=model_id)
+
+
+# def _deploy_model(ti):
+#     model_id = ti.xcom_pull(
+#         task_ids="train_model", key="model_id"
+#     )
+#     print(f"Deploying model {model_id}")
+
+
 with DAG(
     dag_id="branching",
     start_date=pendulum.datetime(2025, 9, 10),
