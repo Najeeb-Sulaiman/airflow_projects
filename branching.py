@@ -22,9 +22,6 @@ with DAG(
     fetch_customer_new = EmptyOperator(task_id="fetch_customer_new")
     clean_customer_new = EmptyOperator(task_id="clean_customer_new")
 
-    fetch_complaint = EmptyOperator(task_id="fetch_complaint")
-    clean_complaint = EmptyOperator(task_id="clean_complaint")
-
     # Function to pick the right CRM to process data from
     def _pick_crm_system(**context):
         if context["execution_date"] < CRM_CHANGE_DATE:
@@ -37,7 +34,10 @@ with DAG(
         python_callable=_pick_crm_system,
         op_args=[CRM_CHANGE_DATE]
     )
-    
+
+    fetch_complaint = EmptyOperator(task_id="fetch_complaint")
+    clean_complaint = EmptyOperator(task_id="clean_complaint")
+
     join_datasets = EmptyOperator(task_id="join_datasets")
     train_model = EmptyOperator(task_id="train_model")
     deploy_model = EmptyOperator(task_id="deploy_model")
