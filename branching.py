@@ -5,7 +5,7 @@ import pendulum
 
 
 with DAG(
-    dag_id="rocket",
+    dag_id="branching",
     start_date=pendulum.datetime(2025, 9, 10),
     schedule=None,
     catchup=False
@@ -40,6 +40,8 @@ with DAG(
 
     # These will not run due to lack of trigger rule
     join_datasets = EmptyOperator(task_id="join_datasets")
+    # join_datasets = EmptyOperator(task_id="join_datasets",
+    #                               trigger_rule="none_failed")
     train_model = EmptyOperator(task_id="train_model")
     deploy_model = EmptyOperator(task_id="deploy_model")
 
@@ -52,7 +54,9 @@ with DAG(
     join_datasets >> train_model >> deploy_model
 
     # Dummy task to explicitly join the different branches before continuing
-    # join_crm_branch = EmptyOperator(task_id="join_crm_branch")
+
+    # join_crm_branch = EmptyOperator(task_id="join_crm_branch",
+    #                                 trigger_rule="none_failed")
 
     # start >> [pick_crm_system, fetch_complaint]
     # pick_crm_system >> [fetch_customer_old, fetch_customer_new]

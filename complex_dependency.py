@@ -4,7 +4,7 @@ import pendulum
 
 
 with DAG(
-    dag_id="rocket",
+    dag_id="complex_dependency",
     start_date=pendulum.datetime(2025, 9, 10),
     schedule=None,
     catchup=False
