@@ -17,14 +17,26 @@ with DAG(
     clean_customer = EmptyOperator(task_id="clean_customer")
     clean_complaint = EmptyOperator(task_id="clean_complaint")
 
-    # Fan out
+    # Linear and Parallel dependecies
+    # fetch_customer >> clean_customer
+    # fetch_complaint >> clean_complaint
+
+    # Fan out dependency
     join_datasets = EmptyOperator(task_id="join_datasets")
     train_model = EmptyOperator(task_id="train_model")
     deploy_model = EmptyOperator(task_id="deploy_model")
 
-    # Linear and Parallel dependecies
+    # Fan out dependency
+    # fetch_customer >> clean_customer
+    # fetch_complaint >> clean_complaint
+    # [clean_customer, clean_complaint] >> join_datasets
+    # join_datasets >> train_model >> deploy_model
+
+    # Fan in dependency
+    start = EmptyOperator(task_id="start")
+
+    start >> [fetch_customer, fetch_complaint]
     fetch_customer >> clean_customer
     fetch_complaint >> clean_complaint
-
     [clean_customer, clean_complaint] >> join_datasets
     join_datasets >> train_model >> deploy_model
