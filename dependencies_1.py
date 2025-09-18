@@ -9,10 +9,14 @@ with DAG(
     schedule=None,
     catchup=False
 ) as dag:
-    
+
     # Linear and Parallel dependecies
     fetch_customer = EmptyOperator(task_id="fetch_customer")
     fetch_complaint = EmptyOperator(task_id="fetch_complaint")
 
     clean_customer = EmptyOperator(task_id="clean_customer")
     clean_complaint = EmptyOperator(task_id="clean_complaint")
+
+    
+    fetch_customer >> clean_customer
+    fetch_complaint >> clean_complaint
