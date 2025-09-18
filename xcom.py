@@ -1,5 +1,5 @@
 import uuid
-from airflow.sdk import DAG
+from airflow.sdk import DAG, task
 from airflow.providers.standard.operators.empty import EmptyOperator
 from airflow.providers.standard.operators.python import BranchPythonOperator
 from airflow.providers.standard.operators.python import PythonOperator
@@ -29,6 +29,22 @@ def _deploy_model(**context):
 #         task_ids="train_model", key="model_id"
 #     )
 #     print(f"Deploying model {model_id}")
+
+
+# Another way to do it
+# @task
+# def _train_model():
+#     model_id = str(uuid.uuid4())
+#     return model_id
+
+
+# @task
+# def _deploy_model(model_id):
+#     print(f"Deploying model {model_id}")
+
+
+# model_id = _train_model()
+# _deploy_model(model_id)
 
 
 with DAG(
