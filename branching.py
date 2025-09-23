@@ -23,8 +23,8 @@ with DAG(
     clean_customer_new = EmptyOperator(task_id="clean_customer_new")
 
     # Function to pick the right CRM to process data from
-    def _pick_crm_system(**context):
-        if context["execution_date"] < CRM_CHANGE_DATE:
+    def _pick_crm_system(CRM_CHANGE_DATE, **context):
+        if context["logical_date"] < CRM_CHANGE_DATE:
             return "fetch_customer_old"
         else:
             return "fetch_customer_new"
