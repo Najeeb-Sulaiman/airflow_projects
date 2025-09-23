@@ -66,8 +66,8 @@ with DAG(
     clean_customer_new = EmptyOperator(task_id="clean_customer_new")
 
     # Function to pick the right CRM to process data from
-    def _pick_crm_system(**context):
-        if context["execution_date"] < CRM_CHANGE_DATE:
+    def _pick_crm_system(CRM_CHANGE_DATE, **context):
+        if context["logical_date"] < CRM_CHANGE_DATE:
             return "fetch_customer_old"
         else:
             return "fetch_customer_new"
@@ -82,9 +82,9 @@ with DAG(
     clean_complaint = EmptyOperator(task_id="clean_complaint")
 
     # These will not run due to lack of trigger rule
-    join_datasets = EmptyOperator(task_id="join_datasets")
-    # join_datasets = EmptyOperator(task_id="join_datasets",
-    #                               trigger_rule="none_failed")
+    # join_datasets = EmptyOperator(task_id="join_datasets")
+    join_datasets = EmptyOperator(task_id="join_datasets",
+                                  trigger_rule="none_failed")
     train_model = PythonOperator(task_id="train_model", python_callable=_train_model)
     deploy_model = PythonOperator(task_id="deploy_model", python_callable=_deploy_model)
 
